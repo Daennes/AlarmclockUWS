@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     TextView update_text;
     Context context;
     PendingIntent pendingIntent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         // initialize start buttons
         Button alarm_on = (Button) findViewById(R.id.alarm_on);
         // create an onclick listener to start alarm
+
+        //create Button to Quiz //for manually enter the quiz section
+        Button toQuiz = (Button) findViewById(R.id.toQuizID);
 
 
 
@@ -135,7 +140,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //for manually enter the quiz section
+        toQuiz.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeToQuiz(v);
+            }
+        });
 
+
+    }
+
+    //for manually enter the quiz section
+    public void changeToQuiz(View view){
+        Intent intent = new Intent(this, QuizActivity.class);
+
+        //Test data exchange between Activities
+        alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);
+        intent.putExtra("hour", String.valueOf(alarm_timepicker.getHour()));
+        intent.putExtra("min", String.valueOf(alarm_timepicker.getMinute()));
+        //-------------------------------------
+
+
+        startActivity(intent);
     }
 
     private void set_alarm_text(String output) {
