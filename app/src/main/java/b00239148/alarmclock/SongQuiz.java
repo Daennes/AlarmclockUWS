@@ -7,22 +7,20 @@ package b00239148.alarmclock;
  * First Idea of Architecture
  */
 
-public class SongQuiz {
+public abstract class SongQuiz {
 
     //Sketch, not final
-    private String songTitle = "";
-    private String[] answers;           //Could be titles or links to song covers??
+    protected String songTitle = "";
 
     //Constructor
-    SongQuiz(String title, String[] answs){
-        this.songTitle = title;
-        this.answers = new String[answs.length];
-
-        for (int i=0; i<answs.length; i++)
-            this.answers[i] = answs[i];
+    SongQuiz(){
+        this.songTitle = "";
     }
 
 
+
     //Methods...
+    protected abstract void readAnswers();
+    public abstract <T>T getAnswers();
 
 }
