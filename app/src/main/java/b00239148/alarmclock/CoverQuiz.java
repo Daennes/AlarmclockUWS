@@ -1,37 +1,38 @@
 package b00239148.alarmclock;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by dennisalt on 10/11/2017.
+ * Created by dennisalt on 12/11/2017.
  */
 
-public class TitleQuiz extends SongQuiz {
+public class CoverQuiz extends SongQuiz {
+
+
     private ArrayList<String[]> answers = new ArrayList<String[]>();       //Could be titles or links to song covers??
 
-    TitleQuiz(){
-        super.songTitle = "Which is the right song title?";
+    CoverQuiz(){
+        super.songTitle = "Which is the right song cover?";
     }
 
-    TitleQuiz(String title){
+    /*CoverQuiz(String title){
         readAnswers();
-    }
+    }*/
 
     public void fillDummyAnsw()
     {
         String[] tempString = new String[2];
         for (int i=0; i<4;i++){
-            answers.add(new String[] {"Answer: " + i, "false"});
+            answers.add(new String[] {"Cover: " + i, "false"});
         }
-        answers.set(1, new String[] {"Answer: " + 1, "true"});
+        answers.set(1, new String[] {"Cover: " + 1, "true"});
     }
 
-    //TODO Implement methods
+
+    //TODO Implement methods cover
+
     @Override
     protected void readAnswers() {
-        //Create an object of the Spotify class
-        //get the Answer data
 
     }
 

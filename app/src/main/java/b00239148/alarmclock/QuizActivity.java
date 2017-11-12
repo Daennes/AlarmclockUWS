@@ -17,12 +17,17 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class QuizActivity extends AppCompatActivity {
 
     SongQuiz Quiz;
+    int rightAnswer = 0;
+    int tries = 0;
 
 
     @Override
@@ -32,34 +37,46 @@ public class QuizActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //create Button to Quiz
-        Button toQuiz = (Button) findViewById(R.id.toSettingsID);
-
-        toQuiz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeToSettings(v);
-            }
-        });
-
         //Test data exchange between Activities
         Intent test_intent = getIntent();
         TextView textview = (TextView) findViewById(R.id.testTimeViewID);
         textview.setText("Picked Time: " + test_intent.getStringExtra("hour") + ":" + test_intent.getStringExtra("min"));
         //-------------------------------------
 
+        ((TextView) findViewById(R.id.textViewTries_id)).setText("Tries: " + tries);
 
 
+        Button submitBtn = (Button) findViewById(R.id.submitBtn_id);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup_id);
 
-        //Class Test----------------------------
-        //TitleQuiz quiz = new TitleQuiz();
-        //Log.d("TAG",(String)quiz.getAnswers()[0]);
+                if(((RadioButton) radioGroup.getChildAt(rightAnswer)).isChecked()){
+                    Toast.makeText(getApplicationContext(), "Hooray!!!", Toast.LENGTH_SHORT).show();
 
-        //--------------------------------------
+                    //Stop Music!
 
+                    onBackPressed();
+                }
+                else if(radioGroup.getCheckedRadioButtonId() != -1){
+                    Toast.makeText(getApplicationContext(), "Wrong answer", Toast.LENGTH_SHORT).show();
+                    loadQuizData();
+                    Log.d("TAG","wrong");
+                }else{
+                    Toast.makeText(getApplicationContext(), "Please choose an answer!", Toast.LENGTH_SHORT).show();
+                }
 
-        loadQuizData();
+            }
+        });
 
+        try {
+            loadQuizData();
+        }
+        catch (Exception e){
+            Log.d("Error","Error Loading Quiz");
+            Log.d("Error",e.getMessage());
+        }
 
 
 
@@ -76,7 +93,13 @@ public class QuizActivity extends AppCompatActivity {
     private void loadQuizData(){
 
         //Here some random function to decide which kind of quiz
-        Quiz = new TitleQuiz();
+        if(Math.floor((Math.random()*2)) == 0)
+            Quiz = new TitleQuiz();
+        else
+            Quiz = new CoverQuiz();
+
+
+        //TODO make it compatible for both sub classes
         //Object[] answers;
         String[] answers;
 
@@ -96,10 +119,24 @@ public class QuizActivity extends AppCompatActivity {
             answers = null;
         }*/
 
-        answers = new String[((String[]) Quiz.getAnswers()).length];
-        for (int i=0; i < answers.length; i++){
-            answers[i] = ((String[]) Quiz.getAnswers())[i];
-        }
+        //Set question
+        ((TextView) findViewById(R.id.questionText)).setText(R.string.question_title);
+
+        answers = new String[((ArrayList<String[]>) Quiz.getAnswers()).size()];
+
+        if(answers != null) {
+            for (int i = 0; i < answers.length; i++) {
+                answers[i] = (((ArrayList<String[]>) Quiz.getAnswers()).get(i))[0];
+
+                //Save right answer
+                if ((((ArrayList<String[]>) Quiz.getAnswers()).get(i))[1] == "true") {
+                    Log.d("TAG", "gefunden");
+                    rightAnswer = i;
+                }
+            }
+        }else
+            answers = new String[0];
+
 
 
 
@@ -107,6 +144,14 @@ public class QuizActivity extends AppCompatActivity {
 
         //Get RadioButtons---------------------
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup_id);
+        Log.d("TAG","gefunden: "+radioGroup.getChildCount() );
+
+        int tempChildCount = radioGroup.getChildCount();
+        for (int i=0; i<tempChildCount; i++)
+        {
+            radioGroup.removeViewAt(0);
+        }
+
 
         try {
             for (int i=0; i < answers.length; i++) {
@@ -121,7 +166,7 @@ public class QuizActivity extends AppCompatActivity {
             Log.d("Error", e.getMessage());
         }
 
-
+        radioGroup.clearCheck();
 
         ArrayList<RadioButton> radioButtonsList = new ArrayList<RadioButton>();
 
@@ -136,13 +181,16 @@ public class QuizActivity extends AppCompatActivity {
 
         //((RadioButton) radioButtonsList.toArray()[0]).setText("test");
         //--------------------------------------
+        ((TextView) findViewById(R.id.textViewTries_id)).setText("Tries: " + ++tries);
+
     }
 
-
+    //Not used anymore----------------------
     public void changeToSettings(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+    //--------------------------------------
 
     private void findbyIDs(){
         //But all findsbyIds here:
