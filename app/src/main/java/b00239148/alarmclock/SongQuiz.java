@@ -10,7 +10,7 @@ package b00239148.alarmclock;
 public abstract class SongQuiz {
 
     //Sketch, not final
-    protected String songTitle = "";
+    protected String songTitle = "jidsjfishdflhsfhisdhfkus";
 
     //Constructor
     SongQuiz(){
