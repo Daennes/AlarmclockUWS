@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //put in extra string into my_intent
                 //tell the clock that you pressed the "alarm on" button
-                my_intent.putExtra("extra", "yes");
+                my_intent.putExtra("extra", "alarm on");
 
                 //create a pending intent that delays the intent
                 //until the specified calender time
@@ -127,7 +127,9 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //cancel alarm
-                alarm_manager.cancel(pendingIntent);
+                //check if pending alarm is already initialized
+                if(pendingIntent != null)
+                    alarm_manager.cancel(pendingIntent);
 
                 //put extra string into my_intent
                 //tell clock that "alarm off" has been pressed
