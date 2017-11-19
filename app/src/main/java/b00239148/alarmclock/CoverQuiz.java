@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by dennisalt on 12/11/2017.
  */
 
-public class CoverQuiz extends SongQuiz {
+public class   CoverQuiz extends SongQuiz {
 
 
     private ArrayList<String[]> answers = new ArrayList<String[]>();       //Could be titles or links to song covers??
