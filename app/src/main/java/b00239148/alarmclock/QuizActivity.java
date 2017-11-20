@@ -61,13 +61,7 @@ public class QuizActivity extends AppCompatActivity  implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
-                AuthenticationResponse.Type.TOKEN,
-                REDIRECT_URI);
-        builder.setScopes(new String[]{"user-read-private", "streaming"});
-        AuthenticationRequest request = builder.build();
-
-        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+        spotifyAuthentication();
 
         //Test data exchange between Activities
         Intent test_intent = getIntent();
@@ -122,20 +116,14 @@ public class QuizActivity extends AppCompatActivity  implements
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        Spotify.destroyPlayer(this);
-        super.onDestroy();
-    }
+    private void spotifyAuthentication() {
+        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
+                AuthenticationResponse.Type.TOKEN,
+                REDIRECT_URI);
+        builder.setScopes(new String[]{"user-read-private", "streaming"});
+        AuthenticationRequest request = builder.build();
 
-    @Override
-    public void onPlaybackEvent(PlayerEvent playerEvent) {
-        Log.d("QuizActivity", "Playback event received: " + playerEvent.name());
-        switch (playerEvent) {
-
-            default:
-                break;
-        }
+        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
     }
 
     public List<PlaylistTrack> getAllTracks() {
@@ -180,15 +168,6 @@ public class QuizActivity extends AppCompatActivity  implements
         }
     }
 
-    @Override
-    public void onPlaybackError(Error error) {
-        Log.d("QuizActivity", "Playback error received: " + error.name());
-        switch (error) {
-            default:
-                break;
-        }
-    }
-
     public void playNextSong() {
 
         if(currentSongIndex<allTracks.size()-1) {
@@ -205,27 +184,6 @@ public class QuizActivity extends AppCompatActivity  implements
         getPlaylist("My Shazam Tracks");
         playNextSong();
 
-    }
-
-    @Override
-    public void onLoggedOut() {
-        Log.d("QuizActivity", "User logged out");
-    }
-
-    @Override
-    public void onLoginFailed(Error error) {
-        Log.d("QuizActivity", "Login failed");
-    }
-
-
-    @Override
-    public void onTemporaryError() {
-        Log.d("QuizActivity", "Temporary error occurred");
-    }
-
-    @Override
-    public void onConnectionMessage(String message) {
-        Log.d("QuizActivity", "Received connection message: " + message);
     }
 
     @Override
@@ -362,5 +320,51 @@ public class QuizActivity extends AppCompatActivity  implements
         //But all findsbyIds here:
     }
 
+
+    @Override
+    protected void onDestroy() {
+        Spotify.destroyPlayer(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPlaybackEvent(PlayerEvent playerEvent) {
+        Log.d("QuizActivity", "Playback event received: " + playerEvent.name());
+        switch (playerEvent) {
+
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onLoggedOut() {
+        Log.d("QuizActivity", "User logged out");
+    }
+
+    @Override
+    public void onLoginFailed(Error error) {
+        Log.d("QuizActivity", "Login failed");
+    }
+
+
+    @Override
+    public void onTemporaryError() {
+        Log.d("QuizActivity", "Temporary error occurred");
+    }
+
+    @Override
+    public void onConnectionMessage(String message) {
+        Log.d("QuizActivity", "Received connection message: " + message);
+    }
+
+    @Override
+    public void onPlaybackError(Error error) {
+        Log.d("QuizActivity", "Playback error received: " + error.name());
+        switch (error) {
+            default:
+                break;
+        }
+    }
 
 }
