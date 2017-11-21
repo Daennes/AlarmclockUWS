@@ -30,7 +30,7 @@ public class TitleQuiz extends SongQuiz {
     //TODO Implement methods
     @Override
     protected void readAnswers() {
-        //Create an object of the Spotify class
+        //Create an object of the MySpotify class
         //get the Answer data
 
     }
