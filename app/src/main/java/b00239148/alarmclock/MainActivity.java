@@ -153,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //TODO add levels of difficulty
+
     //for manually enter the quiz section
     public void changeToQuiz(View view){
         Intent intent = new Intent(this, QuizActivity.class);

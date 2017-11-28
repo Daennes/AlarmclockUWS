@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
@@ -26,8 +27,8 @@ import java.util.ArrayList;
 public class QuizActivity extends AppCompatActivity {
 
     SongQuiz Quiz;
-    int rightAnswer = 0;
-    int tries = 0;
+    private int rightAnswer = 0;
+    private int tries = 0;
 
 
     @Override
@@ -57,7 +58,7 @@ public class QuizActivity extends AppCompatActivity {
 
                     //Stop Music!
 
-                    onBackPressed();
+                    toWeather();
                 }
                 else if(radioGroup.getCheckedRadioButtonId() != -1){
                     Toast.makeText(getApplicationContext(), "Wrong answer", Toast.LENGTH_SHORT).show();
@@ -88,6 +89,12 @@ public class QuizActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    private void toWeather(){
+        Intent intent = new Intent(this, WeatherActivity.class);
+
+        startActivity(intent);
     }
 
     private void loadQuizData(){
