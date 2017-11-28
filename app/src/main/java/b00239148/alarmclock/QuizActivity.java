@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.spotify.sdk.android.player.Spotify;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -60,6 +62,7 @@ public class QuizActivity extends AppCompatActivity {
                 }
                 else if(radioGroup.getCheckedRadioButtonId() != -1){
                     Toast.makeText(getApplicationContext(), "Wrong answer", Toast.LENGTH_SHORT).show();
+                    spotify.playNextSong();
                     loadQuizData();
                     Log.d("TAG","wrong");
                 }else{
@@ -101,10 +104,12 @@ public class QuizActivity extends AppCompatActivity {
     private void loadQuizData(){
 
         //Here some random function to decide which kind of quiz
-        if(Math.floor((Math.random()*2)) == 0)
+        /*if(Math.floor((Math.random()*2)) == 0)
             Quiz = new TitleQuiz();
         else
-            Quiz = new CoverQuiz();
+            Quiz = new CoverQuiz();*/
+
+        Quiz = new TitleQuiz(spotify);
 
 
         //TODO make it compatible for both sub classes
@@ -130,14 +135,17 @@ public class QuizActivity extends AppCompatActivity {
         //Set question
         ((TextView) findViewById(R.id.questionText)).setText(R.string.question_title);
 
-        answers = new String[((ArrayList<String[]>) Quiz.getAnswers()).size()];
+        //answers = new String[((ArrayList<String[]>) Quiz.getAnswers()).size()];
+        ArrayList<String[]> tempAnswers = Quiz.getAnswers();
+        answers = new String[tempAnswers.size()];
+        Collections.shuffle(tempAnswers);
 
         if(answers != null) {
             for (int i = 0; i < answers.length; i++) {
-                answers[i] = (((ArrayList<String[]>) Quiz.getAnswers()).get(i))[0];
+                answers[i] = (tempAnswers.get(i))[0];
 
                 //Save right answer
-                if ((((ArrayList<String[]>) Quiz.getAnswers()).get(i))[1] == "true") {
+                if ((tempAnswers.get(i))[1] == "true") {
                     Log.d("TAG", "gefunden");
                     rightAnswer = i;
                 }

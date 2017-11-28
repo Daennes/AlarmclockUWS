@@ -21,6 +21,8 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 
 
+import com.spotify.sdk.android.player.Spotify;
+
 //Test Commit by Dennis
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     PendingIntent pendingIntent;
 
+    //MySpotify spotify = new MySpotify();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.context = this;
+
+        //spotify.spotifyConnect(this);
 
         // initialize alarm manager
         alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -159,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Test data exchange between Activities
         alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);
+        //intent.putExtra("spotifyObject", spotify);
         intent.putExtra("hour", String.valueOf(alarm_timepicker.getHour()));
         intent.putExtra("min", String.valueOf(alarm_timepicker.getMinute()));
         //-------------------------------------

@@ -13,6 +13,7 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,9 +29,9 @@ import kaaes.spotify.webapi.android.models.Track;
  */
 
 public class MySpotify implements
-        SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
+        SpotifyPlayer.NotificationCallback, ConnectionStateCallback, Serializable {
 
-    private static final String CLIENT_ID = "1c15dd3e98014e828bae9ddca23a2ac5";
+    private static final String CLIENT_ID = "dc6a1b53b1cd459e818d062995fb2427";
     private static final String REDIRECT_URI = "my-first-android-app://callback";
 
     private static final int REQUEST_CODE = 1337;
@@ -106,7 +107,7 @@ public class MySpotify implements
         Log.d("QuizActivity", "User logged in");
 
         //todo provide playlist name from options
-        getPlaylist("My Shazam Tracks");
+        getPlaylist("androidtest");
         playNextSong();
 
     }
