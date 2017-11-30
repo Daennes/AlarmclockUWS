@@ -14,15 +14,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.spotify.sdk.android.player.Spotify;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 public class QuizActivity extends AppCompatActivity {
 
-    MySpotify spotify = new MySpotify();
+    MySpotify spotify = MainActivity.getSpotify();
 
     SongQuiz Quiz;
     int rightAnswer = 0;
@@ -36,16 +33,22 @@ public class QuizActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        spotify.spotifyConnect(this);
 
         //Test data exchange between Activities
         Intent test_intent = getIntent();
+
         TextView textview = (TextView) findViewById(R.id.testTimeViewID);
         textview.setText("Picked Time: " + test_intent.getStringExtra("hour") + ":" + test_intent.getStringExtra("min"));
         //-------------------------------------
 
         ((TextView) findViewById(R.id.textViewTries_id)).setText("Tries: " + tries);
 
+
+        spotify.setOrChangePlaylist(test_intent.getStringExtra("playlistName"));
+        if(!spotify.playNextSong()) {
+            Toast.makeText(getApplicationContext(), "Playlist not found or empty!!!", Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
 
         Button submitBtn = (Button) findViewById(R.id.submitBtn_id);
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -57,12 +60,16 @@ public class QuizActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Hooray!!!", Toast.LENGTH_SHORT).show();
 
                     //Stop Music!
-
+                    spotify.stopMusic();
                     onBackPressed();
                 }
                 else if(radioGroup.getCheckedRadioButtonId() != -1){
                     Toast.makeText(getApplicationContext(), "Wrong answer", Toast.LENGTH_SHORT).show();
-                    spotify.playNextSong();
+                    if(!spotify.playNextSong()) {
+                        Toast.makeText(getApplicationContext(), "PlaylistEnded!!!", Toast.LENGTH_SHORT).show();
+                        spotify.stopMusic();
+                        onBackPressed();
+                    }
                     loadQuizData();
                     Log.d("TAG","wrong");
                 }else{
@@ -95,11 +102,6 @@ public class QuizActivity extends AppCompatActivity {
 
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        spotify.spotifyLogin(requestCode, resultCode, intent, this);
-    }
 
     private void loadQuizData(){
 
@@ -212,10 +214,4 @@ public class QuizActivity extends AppCompatActivity {
         //But all findsbyIds here:
     }
 
-
-    @Override
-    protected void onDestroy() {
-        Spotify.destroyPlayer(spotify);
-        super.onDestroy();
-    }
 }

@@ -3,8 +3,6 @@ package b00239148.alarmclock;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.spotify.sdk.android.player.Spotify;
-
 import kaaes.spotify.webapi.android.models.PlaylistTrack;
 
 /**

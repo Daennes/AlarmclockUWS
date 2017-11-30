@@ -41,8 +41,10 @@ public class MySpotify implements
     private Player mPlayer;
     private SpotifyService spotify;
 
+    private boolean isAnyPlaylistActive = false;
 
-    void spotifyConnect(QuizActivity quizActivity) {
+
+    void spotifyConnect(MainActivity quizActivity) {
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN,
                 REDIRECT_URI);
@@ -56,11 +58,13 @@ public class MySpotify implements
         return allTracks;
     }
 
+
     public Track getCurrentSong() {
         return allTracks.get(currentSongIndex).track;
     }
 
-    public void getPlaylist(final String playlistName) {
+
+    public void setOrChangePlaylist(final String playlistName) {
 
         Thread t = new Thread(new Runnable() {
             @Override
@@ -71,6 +75,7 @@ public class MySpotify implements
                         if (playlistSimpleItem.name.equals(playlistName)) {
                             Pager<PlaylistTrack> playlistTracks = spotify.getPlaylistTracks(playlistSimpleItem.owner.id, playlistSimpleItem.id);
                             allTracks = playlistTracks.items;
+                            isAnyPlaylistActive = true;
                             break;
                         }
                     }
@@ -83,6 +88,7 @@ public class MySpotify implements
                     Collections.shuffle(allTracks);
                 } catch (Exception e) {
                     Log.e("Error", e.getMessage());
+                    isAnyPlaylistActive = false;
                 }
             }
         });
@@ -94,12 +100,29 @@ public class MySpotify implements
         }
     }
 
-    public void playNextSong() {
+    public boolean playNextSong() {
 
-        if (currentSongIndex < allTracks.size() - 1) {
+        if (isAnyPlaylistActive && currentSongIndex < allTracks.size() - 1) {
             currentSongIndex = currentSongIndex + 1;
             mPlayer.playUri(null, allTracks.get(currentSongIndex).track.uri, 0, 0);
+            return true;
         }
+
+        return false;
+    }
+
+    public void stopMusic() {
+        mPlayer.pause(new Player.OperationCallback() {
+            @Override
+            public void onSuccess() {
+                Log.d("QuizActivity", "Music stopped successfully");
+            }
+
+            @Override
+            public void onError(Error error) {
+
+            }
+        });
     }
 
     @Override
@@ -107,12 +130,12 @@ public class MySpotify implements
         Log.d("QuizActivity", "User logged in");
 
         //todo provide playlist name from options
-        getPlaylist("androidtest");
-        playNextSong();
+//        setOrChangePlaylist("My Shazam Tracks");
+//        playNextSong();
 
     }
 
-    void spotifyLogin(int requestCode, int resultCode, Intent intent, final QuizActivity quizActivity) {
+    void spotifyLogin(int requestCode, int resultCode, Intent intent, final MainActivity quizActivity) {
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
