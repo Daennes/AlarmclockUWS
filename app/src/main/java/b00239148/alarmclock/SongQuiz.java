@@ -12,6 +12,8 @@ public abstract class SongQuiz {
     //Sketch, not final
     protected String songTitle = "";
 
+    protected MySpotify mySpotify;
+
     //Constructor
     SongQuiz(){
         this.songTitle = "";

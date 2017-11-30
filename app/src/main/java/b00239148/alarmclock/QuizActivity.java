@@ -1,12 +1,7 @@
 package b00239148.alarmclock;
 
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,17 +9,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class QuizActivity extends AppCompatActivity {
+
+    MySpotify spotify = MainActivity.getSpotify();
 
     SongQuiz Quiz;
     private int rightAnswer = 0;
@@ -38,14 +34,22 @@ public class QuizActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         //Test data exchange between Activities
         Intent test_intent = getIntent();
+
         TextView textview = (TextView) findViewById(R.id.testTimeViewID);
         textview.setText("Picked Time: " + test_intent.getStringExtra("hour") + ":" + test_intent.getStringExtra("min"));
         //-------------------------------------
 
         ((TextView) findViewById(R.id.textViewTries_id)).setText("Tries: " + tries);
 
+
+        spotify.setOrChangePlaylist(test_intent.getStringExtra("playlistName"));
+        if(!spotify.playNextSong()) {
+            Toast.makeText(getApplicationContext(), "Playlist not found or empty!!!", Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
 
         Button submitBtn = (Button) findViewById(R.id.submitBtn_id);
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -57,11 +61,16 @@ public class QuizActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Hooray!!!", Toast.LENGTH_SHORT).show();
 
                     //Stop Music!
-
+                    spotify.stopMusic();
                     toWeather();
                 }
                 else if(radioGroup.getCheckedRadioButtonId() != -1){
                     Toast.makeText(getApplicationContext(), "Wrong answer", Toast.LENGTH_SHORT).show();
+                    if(!spotify.playNextSong()) {
+                        Toast.makeText(getApplicationContext(), "PlaylistEnded!!!", Toast.LENGTH_SHORT).show();
+                        spotify.stopMusic();
+                        onBackPressed();
+                    }
                     loadQuizData();
                     Log.d("TAG","wrong");
                 }else{
@@ -100,10 +109,12 @@ public class QuizActivity extends AppCompatActivity {
     private void loadQuizData(){
 
         //Here some random function to decide which kind of quiz
-        if(Math.floor((Math.random()*2)) == 0)
+        /*if(Math.floor((Math.random()*2)) == 0)
             Quiz = new TitleQuiz();
         else
-            Quiz = new CoverQuiz();
+            Quiz = new CoverQuiz();*/
+
+        Quiz = new TitleQuiz(spotify);
 
 
         //TODO make it compatible for both sub classes
@@ -129,14 +140,17 @@ public class QuizActivity extends AppCompatActivity {
         //Set question
         ((TextView) findViewById(R.id.questionText)).setText(R.string.question_title);
 
-        answers = new String[((ArrayList<String[]>) Quiz.getAnswers()).size()];
+        //answers = new String[((ArrayList<String[]>) Quiz.getAnswers()).size()];
+        ArrayList<String[]> tempAnswers = Quiz.getAnswers();
+        answers = new String[tempAnswers.size()];
+        Collections.shuffle(tempAnswers);
 
         if(answers != null) {
             for (int i = 0; i < answers.length; i++) {
-                answers[i] = (((ArrayList<String[]>) Quiz.getAnswers()).get(i))[0];
+                answers[i] = (tempAnswers.get(i))[0];
 
                 //Save right answer
-                if ((((ArrayList<String[]>) Quiz.getAnswers()).get(i))[1] == "true") {
+                if ((tempAnswers.get(i))[1] == "true") {
                     Log.d("TAG", "gefunden");
                     rightAnswer = i;
                 }
@@ -202,6 +216,5 @@ public class QuizActivity extends AppCompatActivity {
     private void findbyIDs(){
         //But all findsbyIds here:
     }
-
 
 }
