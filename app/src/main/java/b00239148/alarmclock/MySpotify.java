@@ -129,10 +129,6 @@ public class MySpotify implements
     public void onLoggedIn() {
         Log.d("QuizActivity", "User logged in");
 
-        //todo provide playlist name from options
-//        setOrChangePlaylist("My Shazam Tracks");
-//        playNextSong();
-
     }
 
     void spotifyLogin(int requestCode, int resultCode, Intent intent, final MainActivity quizActivity) {

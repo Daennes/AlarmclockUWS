@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -69,7 +68,7 @@ public class QuizActivity extends AppCompatActivity {
                     if(!spotify.playNextSong()) {
                         Toast.makeText(getApplicationContext(), "PlaylistEnded!!!", Toast.LENGTH_SHORT).show();
                         spotify.stopMusic();
-                        onBackPressed();
+                        toWeather();
                     }
                     loadQuizData();
                     Log.d("TAG","wrong");
