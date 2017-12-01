@@ -27,8 +27,6 @@ public class QuizActivity extends AppCompatActivity {
     MySpotify spotify = MainActivity.getSpotify();
 
     SongQuiz Quiz;
-    int rightAnswer = 0;
-    int tries = 0;
     Context cntx = this;
     private int rightAnswer = 0;
     private int tries = 0;
