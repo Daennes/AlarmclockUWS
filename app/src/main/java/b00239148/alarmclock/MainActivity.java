@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     PendingIntent pendingIntent;
 
+    private EditText playlistNameEdit;
+    private TextView playlistNameView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +59,22 @@ public class MainActivity extends AppCompatActivity {
         alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarm_timepicker = findViewById(R.id.timePicker);
         update_text = findViewById(R.id.update_text);
+        playlistNameEdit = findViewById(R.id.PlaylistTextEdit);
+        playlistNameView = findViewById(R.id.PlaylistTestView);
+        Button setPlaylist = findViewById(R.id.button);
+
         final Calendar calendar = Calendar.getInstance();
         final Intent my_intent = new Intent(this.context, Alarm_Receiver.class);
         Button alarm_on = findViewById(R.id.alarm_on);
 
         registerReceiver(broadcastReceiver, new IntentFilter("ALARM IS ON"));
+
+        setPlaylist.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playlistNameView.setText(playlistNameEdit.getText().toString());
+            }
+        });
 
         alarm_on.setOnClickListener(new OnClickListener() {
             @Override
@@ -97,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -106,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeToQuiz(){
 
-        String playlistName = ((EditText)findViewById(R.id.playlistText_id)).getText().toString();
+        String playlistName = playlistNameView.getText().toString();
         Intent intent = new Intent(this, QuizActivity.class);
 
         alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);

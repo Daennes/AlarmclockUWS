@@ -30,6 +30,8 @@ public class QuizActivity extends AppCompatActivity {
     int rightAnswer = 0;
     int tries = 0;
     Context cntx = this;
+    private int rightAnswer = 0;
+    private int tries = 0;
 
 
     @Override
@@ -68,14 +70,14 @@ public class QuizActivity extends AppCompatActivity {
 
                     //Stop Music!
                     spotify.stopMusic();
-                    onBackPressed();
+                    toWeather();
                 }
                 else if(radioGroup.getCheckedRadioButtonId() != -1){
                     Toast.makeText(getApplicationContext(), "Wrong answer", Toast.LENGTH_SHORT).show();
                     if(!spotify.playNextSong()) {
                         Toast.makeText(getApplicationContext(), "PlaylistEnded!!!", Toast.LENGTH_SHORT).show();
                         spotify.stopMusic();
-                        onBackPressed();
+                        toWeather();
                     }
                     loadQuizData();
                     Log.d("TAG","wrong");
@@ -106,9 +108,11 @@ public class QuizActivity extends AppCompatActivity {
         });
     }
 
+    private void toWeather(){
+        Intent intent = new Intent(this, WeatherActivity.class);
 
-
-
+        startActivity(intent);
+    }
 
     private void loadQuizData(){
 
