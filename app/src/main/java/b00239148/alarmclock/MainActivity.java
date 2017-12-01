@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeToQuiz(){
 
-        String playlistName = ((EditText)findViewById(R.id.EditText)).getText().toString();
+        String playlistName = ((EditText)findViewById(R.id.playlistText_id)).getText().toString();
         Intent intent = new Intent(this, QuizActivity.class);
 
         alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);

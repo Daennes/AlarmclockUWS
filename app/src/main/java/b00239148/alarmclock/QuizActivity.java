@@ -1,6 +1,9 @@
 package b00239148.alarmclock;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +17,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -24,6 +29,7 @@ public class QuizActivity extends AppCompatActivity {
     SongQuiz Quiz;
     int rightAnswer = 0;
     int tries = 0;
+    Context cntx = this;
 
 
     @Override
@@ -32,6 +38,7 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
 
         //Test data exchange between Activities
@@ -107,16 +114,18 @@ public class QuizActivity extends AppCompatActivity {
 
         //Here some random function to decide which kind of quiz
         /*if(Math.floor((Math.random()*2)) == 0)
-            Quiz = new TitleQuiz();
+            Quiz = new TitleQuiz(spotify);
         else
-            Quiz = new CoverQuiz();*/
+            Quiz = new CoverQuiz(spotify);*/
 
-        Quiz = new TitleQuiz(spotify);
 
+        CoverQuiz testQuiz = new CoverQuiz(spotify);
+
+        loadCoverQuiz();
 
         //TODO make it compatible for both sub classes
         //Object[] answers;
-        String[] answers;
+
 
         /*if (Quiz instanceof TitleQuiz){
             answers = new String[((String[]) Quiz.getAnswers()).length];
@@ -135,6 +144,35 @@ public class QuizActivity extends AppCompatActivity {
         }*/
 
         //Set question
+
+        new LoadImages().execute(testQuiz);
+
+    }
+
+    //Not used anymore----------------------
+    public void changeToSettings(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+    //--------------------------------------
+
+    private void findbyIDs(){
+        //But all findsbyIds here:
+    }
+
+    private void loadCoverQuiz(){
+        CoverQuiz cQuiz = new CoverQuiz(spotify);
+        new LoadImages().execute(cQuiz);
+
+
+    }
+
+
+    private void loadTitleQuiz(){
+
+        Quiz = new TitleQuiz(spotify);
+        String[] answers;
+
         ((TextView) findViewById(R.id.questionText)).setText(R.string.question_title);
 
         //answers = new String[((ArrayList<String[]>) Quiz.getAnswers()).size()];
@@ -203,15 +241,73 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
-    //Not used anymore----------------------
-    public void changeToSettings(View view){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-    //--------------------------------------
+    private class LoadImages extends AsyncTask<CoverQuiz, Void, ArrayList<Drawable>> {
 
-    private void findbyIDs(){
-        //But all findsbyIds here:
+        Drawable draw;
+
+        private Exception exception;
+
+        @Override
+        protected ArrayList<Drawable> doInBackground(CoverQuiz... coverQuizs) {
+            return coverQuizs[0].getAnswers();
+        }
+
+        protected void onPostExecute(ArrayList<Drawable> draw) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
+            //testDrwa = draw;
+            //((RadioButton) findViewById(R.id.radioButton_id)).setCompoundDrawablesWithIntrinsicBounds(draw, null,null, null);
+
+            //Get RadioButtons---------------------
+            RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup_id);
+            Log.d("TAG","gefunden: "+radioGroup.getChildCount() );
+
+            int tempChildCount = radioGroup.getChildCount();
+            for (int i=0; i<tempChildCount; i++)
+            {
+                radioGroup.removeViewAt(0);
+            }
+
+
+            Drawable rightAnswers = draw.get(0);
+            Collections.shuffle(draw);
+
+            for (int i=0; i<draw.size(); i++){
+                if(draw.get(i) == rightAnswers)
+                    rightAnswer = i;
+            }
+
+
+            try {
+                for (int i=0; i < draw.size(); i++) {
+                    RadioButton radioButton = new RadioButton(cntx);
+                    radioButton.setCompoundDrawablesRelativeWithIntrinsicBounds(draw.get(i),null,null,null);
+                    radioButton.setId((int) i+1);//set radiobutton id and store it somewhere
+                    RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(15, 15, 15, 15);
+                    radioGroup.addView(radioButton, params);
+                }
+            }
+            catch (Exception e){
+                Log.d("Error", e.getMessage());
+            }
+
+            radioGroup.clearCheck();
+
+            ArrayList<RadioButton> radioButtonsList = new ArrayList<RadioButton>();
+
+            for (int i=0;i<radioGroup.getChildCount();i++) {
+                View rb = radioGroup.getChildAt(i);
+                if (rb instanceof RadioButton) {
+                    radioButtonsList.add((RadioButton)rb);
+                }
+            }
+            Log.d("TAG","you have "+radioButtonsList.size()+" radio buttons");
+
+
+        }
+
+
     }
 
 }
