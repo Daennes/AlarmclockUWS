@@ -2,7 +2,6 @@ package b00239148.alarmclock;
 
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.InputStream;
 import java.net.URL;
