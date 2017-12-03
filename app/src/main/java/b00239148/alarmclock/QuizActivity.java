@@ -113,39 +113,10 @@ public class QuizActivity extends AppCompatActivity {
     private void loadQuizData(){
 
         //Here some random function to decide which kind of quiz
-        /*if(Math.floor((Math.random()*2)) == 0)
-            Quiz = new TitleQuiz(spotify);
+        if(Math.floor((Math.random()*2)) == 0)
+            loadTitleQuiz();
         else
-            Quiz = new CoverQuiz(spotify);*/
-
-
-        CoverQuiz testQuiz = new CoverQuiz(spotify);
-
-        loadCoverQuiz();
-
-        //TODO make it compatible for both sub classes
-        //Object[] answers;
-
-
-        /*if (Quiz instanceof TitleQuiz){
-            answers = new String[((String[]) Quiz.getAnswers()).length];
-            for (int i=0; i < answers.length; i++){
-                answers[i] = ((String[]) Quiz.getAnswers())[i];
-            }
-        }
-        else if(Quiz.getAnswers() instanceof Drawable[]){                       //Subclass of SongQuiz
-            answers = new Drawable[((Drawable[]) Quiz.getAnswers()).length];
-            for (int i=0; i < answers.length; i++){
-                answers[i] = ((Drawable[]) Quiz.getAnswers())[i];
-            }
-        }
-        else{
-            answers = null;
-        }*/
-
-        //Set question
-
-        new LoadImages().execute(testQuiz);
+            loadCoverQuiz();
 
     }
 

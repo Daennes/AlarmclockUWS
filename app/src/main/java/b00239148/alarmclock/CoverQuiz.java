@@ -49,13 +49,31 @@ public class CoverQuiz extends SongQuiz {
         List<PlaylistTrack> AllTracks = mySpotify.getAllTracks();
         InputStream is = null;
         ArrayList<Drawable> d = new ArrayList<Drawable>();
+        Drawable tempDraw = null;
+        String[] urls = new String[3];
+        String tempUrl = "";
 
         try {
+            urls[0] = mySpotify.getCurrentSong().album.images.get(0).url;
             is = (InputStream) new URL(mySpotify.getCurrentSong().album.images.get(0).url).getContent();
             d.add(Drawable.createFromStream(is, "src name"));
             for (int i=0; i<2;i++){
-                is = (InputStream) new URL(AllTracks.get(i).track.album.images.get(0).url).getContent();
+
+                tempUrl = AllTracks.get((int)Math.floor((Math.random()*AllTracks.size()))).track.album.images.get(0).url;
+
+                for (int j=0; j<urls.length; j++){
+                    if (tempUrl == urls[j]){             //check if the titke is already in the answers
+                        tempUrl = AllTracks.get((int)Math.floor((Math.random()*AllTracks.size()))).track.album.images.get(0).url;
+                        j=0;
+                        continue;
+                    }
+                }
+
+                urls[i+1] = tempUrl;
+                is = (InputStream) new URL(tempUrl).getContent();
                 d.add(Drawable.createFromStream(is, "src name"));
+
+
             }
 
             return d;
