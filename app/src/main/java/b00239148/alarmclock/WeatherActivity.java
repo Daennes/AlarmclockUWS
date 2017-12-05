@@ -107,8 +107,8 @@ public class WeatherActivity extends AppCompatActivity {
             nameView.setText(name);
             regionView.setText(region);
             countryView.setText(country);
-            latView.setText("Latitude :" + lat);
-            lonView.setText("Longitude :" + lon);
+            latView.setText("Lat: " + lat + " ");
+            lonView.setText("Lon: " + lon);
 
             JSONObject current = jsonObject.getJSONObject("current");
             String temp_c = current.getString("temp_c");
@@ -119,8 +119,8 @@ public class WeatherActivity extends AppCompatActivity {
             String feelslike_c = current.getString("feelslike_c");
             String vis_km = current.getString("vis_km");
 
-            tempViewC.setText("Temperature  C:" + temp_c);
-            tempViewF.setText("Temperature F:" + temp_f);
+            tempViewC.setText("Temp C: " + temp_c);
+            tempViewF.setText("Temp F: " + temp_f);
             windView.setText("Wind mph :" + wind_mph);
             prsView.setText("Wind Pressure :" + pressure_mb);
             humidView.setText("Humidity :" + humidity);
@@ -132,8 +132,10 @@ public class WeatherActivity extends AppCompatActivity {
                     .load("http:" + icon)
                     .into(i);
 
+
+
             String condition = current.getJSONObject("condition").getString("text");
-            condView.setText("Condition :" + condition);
+            condView.setText("Condition: " + condition);
 
             String code = current.getJSONObject("condition").getString("code");
             if(code.equals("1000"))
