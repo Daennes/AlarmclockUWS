@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Alarmclock.iml" filepath="$PROJECT_DIR$/Alarmclock.iml" />
+      <module fileurl="file://C:\Users\John\AndroidStudioProjects\AlarmclockUWSSpotifyBranch\Alarmclock.iml" filepath="C:\Users\John\AndroidStudioProjects\AlarmclockUWSSpotifyBranch\Alarmclock.iml" />
       <module fileurl="file://$PROJECT_DIR$/AlarmclockUWS.iml" filepath="$PROJECT_DIR$/AlarmclockUWS.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AlarmclockUWS1.iml" filepath="$PROJECT_DIR$/AlarmclockUWS1.iml" />
+      <module fileurl="file://C:\Users\John\AndroidStudioProjects\AlarmclockUWSSpotifyBranch\AlarmclockUWS.iml" filepath="C:\Users\John\AndroidStudioProjects\AlarmclockUWSSpotifyBranch\AlarmclockUWS.iml" />
+      <module fileurl="file://C:\Users\John\AndroidStudioProjects\AlarmclockUWSSpotifyBranch\AlarmclockUWS1.iml" filepath="C:\Users\John\AndroidStudioProjects\AlarmclockUWSSpotifyBranch\AlarmclockUWS1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/AlarmclockUWSSpotifyBranch.iml" filepath="$PROJECT_DIR$/.idea/AlarmclockUWSSpotifyBranch.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

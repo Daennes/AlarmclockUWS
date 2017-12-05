@@ -22,15 +22,16 @@
 
         <receiver android:name=".Alarm_Receiver" />
 
-        <service
-            android:name=".RingtonePlayingService"
-            android:enabled="true" />
 
         <activity
             android:name=".QuizActivity"
             android:label="@string/title_activity_quiz"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity
+            android:name="com.spotify.sdk.android.authentication.LoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".WeatherActivity"
             android:label="@string/title_activity_weather"

@@ -2,28 +2,36 @@ package b00239148.alarmclock;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.util.Calendar;
+import com.spotify.sdk.android.player.Spotify;
 
+import java.util.Calendar;
 
 //Test Commit by Dennis
 
 public class MainActivity extends AppCompatActivity {
+
+
+    public static MySpotify getSpotify() {
+        return spotify;
+    }
+
+    private static MySpotify spotify = new MySpotify();
 
     // alarm manager
     AlarmManager alarm_manager;
@@ -31,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     TextView update_text;
     Context context;
     PendingIntent pendingIntent;
+
+    private EditText playlistNameEdit;
+    private TextView playlistNameView;
 
 
     @Override
@@ -41,43 +52,38 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         this.context = this;
 
-        // initialize alarm manager
+        spotify.spotifyConnect(this);
+
         alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarm_timepicker = findViewById(R.id.timePicker);
+        update_text = findViewById(R.id.update_text);
+        playlistNameEdit = findViewById(R.id.PlaylistTextEdit);
+        playlistNameView = findViewById(R.id.PlaylistTestView);
+        Button setPlaylist = findViewById(R.id.button);
 
-        // initialize timepicker
-        alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);
-
-        // initialize text update box
-        update_text = (TextView) findViewById(R.id.update_text);
-
-        // create instance of calender
         final Calendar calendar = Calendar.getInstance();
-
-        // create an intent to the alarm reciever class
         final Intent my_intent = new Intent(this.context, Alarm_Receiver.class);
+        Button alarm_on = findViewById(R.id.alarm_on);
 
-        // initialize start buttons
-        Button alarm_on = (Button) findViewById(R.id.alarm_on);
-        // create an onclick listener to start alarm
+        registerReceiver(broadcastReceiver, new IntentFilter("ALARM IS ON"));
 
-        //create Button to Quiz //for manually enter the quiz section
-        Button toQuiz = (Button) findViewById(R.id.toQuizID);
-
-
+        setPlaylist.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playlistNameView.setText(playlistNameEdit.getText().toString());
+            }
+        });
 
         alarm_on.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                // setting calendar instance with the hour and minute thats been picked on timepicker
                 calendar.set(Calendar.HOUR_OF_DAY, alarm_timepicker.getHour());
                 calendar.set(Calendar.MINUTE, alarm_timepicker.getMinute());
 
-                //get string values of hour and minute
                 int hour = alarm_timepicker.getHour();
                 int minute = alarm_timepicker.getMinute();
 
-                // convert int values to strings
                 String hour_string = String.valueOf(hour);
                 String minute_string = String.valueOf(minute);
 
@@ -90,87 +96,50 @@ public class MainActivity extends AppCompatActivity {
                     minute_string = "0" + String.valueOf(minute);
                 }
 
-
-                //methods that changes the update text
                 set_alarm_text("Alarm set to: " + hour_string + ":" + minute_string);
 
-                //put in extra string into my_intent
-                //tell the clock that you pressed the "alarm on" button
                 my_intent.putExtra("extra", "alarm on");
 
-                //create a pending intent that delays the intent
-                //until the specified calender time
                 pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0,
                         my_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                //set the alarm manager
                 alarm_manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         pendingIntent);
 
             }
         });
 
-
-
-
-        // initialize stop button
-        Button alarm_off = (Button) findViewById(R.id.alarm_off);
-        // create an onclick lister to stop alarm or undo alarm set
-
-
-        alarm_off.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //methods that changes the update text
-                set_alarm_text("Alarm off!");
-
-
-                //cancel alarm
-                //check if pending alarm is already initialized
-                if(pendingIntent != null)
-                    alarm_manager.cancel(pendingIntent);
-
-                //put extra string into my_intent
-                //tell clock that "alarm off" has been pressed
-                my_intent.putExtra("extra", "alarm off");
-
-                //stop the alarm ringtone
-                sendBroadcast(my_intent);
-
-
-            }
-        });
-
-        //for manually enter the quiz section
-        toQuiz.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeToQuiz(v);
-            }
-        });
-
-
     }
 
-    //TODO add levels of difficulty
 
-    //for manually enter the quiz section
-    public void changeToQuiz(View view){
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            changeToQuiz();
+        }
+    };
+
+    public void changeToQuiz(){
+
+        String playlistName = playlistNameView.getText().toString();
         Intent intent = new Intent(this, QuizActivity.class);
 
-        //Test data exchange between Activities
         alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);
         intent.putExtra("hour", String.valueOf(alarm_timepicker.getHour()));
         intent.putExtra("min", String.valueOf(alarm_timepicker.getMinute()));
-        //-------------------------------------
-
+        intent.putExtra("playlistName", playlistName);
 
         startActivity(intent);
     }
 
     private void set_alarm_text(String output) {
         update_text.setText(output);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        spotify.spotifyLogin(requestCode, resultCode, intent, this);
     }
 
     @Override
@@ -193,5 +162,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Spotify.destroyPlayer(spotify);
+        super.onDestroy();
     }
 }
