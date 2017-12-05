@@ -125,8 +125,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, QuizActivity.class);
 
         alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);
-        intent.putExtra("hour", String.valueOf(alarm_timepicker.getHour()));
-        intent.putExtra("min", String.valueOf(alarm_timepicker.getMinute()));
         intent.putExtra("playlistName", playlistName);
 
         startActivity(intent);

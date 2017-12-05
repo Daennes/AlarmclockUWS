@@ -3,6 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_quiz">QuizActivity</string>
     <string name="question_title">Can you guess the tilte of the song?</string>
+    <string name="question_Cover">Can you guess the Cover of the song?</string>
     <string name="quiz_title">Wake up and concentrate on the song!</string>
     <string name="title_activity_weather">WeatherActivity</string>
 </resources>

@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,10 @@ public class QuizActivity extends AppCompatActivity {
     private int rightAnswer = 0;
     private int tries = 0;
 
+    @Override
+    public void onBackPressed() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +48,6 @@ public class QuizActivity extends AppCompatActivity {
         //Test data exchange between Activities
         Intent test_intent = getIntent();
 
-        TextView textview = (TextView) findViewById(R.id.testTimeViewID);
-        textview.setText("Picked Time: " + test_intent.getStringExtra("hour") + ":" + test_intent.getStringExtra("min"));
         //-------------------------------------
 
         ((TextView) findViewById(R.id.textViewTries_id)).setText("Tries: " + tries);
@@ -60,6 +64,8 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup_id);
+
+                ((TextView) findViewById(R.id.textViewTries_id)).setText("Tries: " + ++tries);
 
                 if(((RadioButton) radioGroup.getChildAt(rightAnswer)).isChecked()){
                     Toast.makeText(getApplicationContext(), "Hooray!!!", Toast.LENGTH_SHORT).show();
@@ -93,15 +99,6 @@ public class QuizActivity extends AppCompatActivity {
         }
 
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     private void toWeather(){
@@ -133,6 +130,8 @@ public class QuizActivity extends AppCompatActivity {
 
     private void loadCoverQuiz(){
         CoverQuiz cQuiz = new CoverQuiz(spotify);
+
+        ((TextView) findViewById(R.id.questionText)).setText(R.string.question_Cover);
         new LoadImages().execute(cQuiz);
 
 
@@ -142,27 +141,18 @@ public class QuizActivity extends AppCompatActivity {
     private void loadTitleQuiz(){
 
         Quiz = new TitleQuiz(spotify);
-        String[] answers;
+
 
         ((TextView) findViewById(R.id.questionText)).setText(R.string.question_title);
 
-        //answers = new String[((ArrayList<String[]>) Quiz.getAnswers()).size()];
-        ArrayList<String[]> tempAnswers = Quiz.getAnswers();
-        answers = new String[tempAnswers.size()];
+        ArrayList<String> tempAnswers = Quiz.getAnswers();
         Collections.shuffle(tempAnswers);
 
-        if(answers != null) {
-            for (int i = 0; i < answers.length; i++) {
-                answers[i] = (tempAnswers.get(i))[0];
-
-                //Save right answer
-                if ((tempAnswers.get(i))[1] == "true") {
-                    Log.d("TAG", "gefunden");
-                    rightAnswer = i;
-                }
+        for (int i= 0; i<tempAnswers.size(); i++){
+            if (tempAnswers.get(i) == spotify.getCurrentSong().name){
+                rightAnswer = i;
             }
-        }else
-            answers = new String[0];
+        }
 
 
 
@@ -181,11 +171,19 @@ public class QuizActivity extends AppCompatActivity {
 
 
         try {
-            for (int i=0; i < answers.length; i++) {
+            for (int i=0; i < tempAnswers.size(); i++) {
                 RadioButton radioButton = new RadioButton(this);
-                radioButton.setText(answers[i]);
+                radioButton.setText(tempAnswers.get(i));
+                radioButton.setBackgroundResource(R.drawable.rbbackground);
                 radioButton.setId((int) i+1);//set radiobutton id and store it somewhere
                 RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(0, 50, 0, 15);
+                radioButton.setPadding(15,30,15,30);
+                //radioButton.setHeight(200);
+                radioButton.setTextSize(20);
+                radioButton.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                radioButton.setWidth(1000);
+                radioButton.setButtonDrawable(android.R.color.transparent);
                 radioGroup.addView(radioButton, params);
             }
         }
@@ -208,7 +206,7 @@ public class QuizActivity extends AppCompatActivity {
 
         //((RadioButton) radioButtonsList.toArray()[0]).setText("test");
         //--------------------------------------
-        ((TextView) findViewById(R.id.textViewTries_id)).setText("Tries: " + ++tries);
+
 
     }
 
@@ -248,15 +246,68 @@ public class QuizActivity extends AppCompatActivity {
                     rightAnswer = i;
             }
 
+            Log.d("RadiogroupWidth", String.valueOf(radioGroup.getWidth()));
+
+            /*int rows = draw.size()/2;
+
+            if (draw.size()%2 > 0)
+                rows++;
+
+            TableLayout tableLayout = new TableLayout(cntx);
+
+            try {
+                for (int i=0; i < rows; i++) {
+                    TableRow tableRow = new TableRow(cntx);
+                    TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+
+                    for (int j=0; j<2; j++){
+
+                        if((i*rows+j) == draw.size())
+                            break;
+
+                        RadioButton radioButton = new RadioButton(cntx);
+                        radioButton.setBackgroundResource(R.drawable.rbbackground);
+                        radioButton.setCompoundDrawablesRelativeWithIntrinsicBounds(null,draw.get(i+j),null,null);
+                        radioButton.setId((int) i+j+1);//set radiobutton id and store it somewhere
+                        //RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+                        //params.setMargins((radioGroup.getWidth()-draw.get(i).getMinimumWidth()-20)/2, 5, (radioGroup.getWidth()-draw.get(i).getMinimumWidth()-20)/2, 5);
+
+                        radioButton.setWidth(draw.get(i).getMinimumWidth()+20);
+                        radioButton.setHeight(draw.get(i).getMinimumHeight() + 20);
+                        radioButton.setPadding(10,10,10,10);
+                        radioButton.setButtonDrawable(android.R.color.transparent);
+                        tableRow.addView(radioButton, params);
+                        Log.d("RadiogroupWidth", String.valueOf(radioGroup.getWeightSum()));
+                    }
+
+                    TableLayout.LayoutParams paramsTable = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+                    tableLayout.addView(tableRow,paramsTable);
+                }
+                RadioGroup.LayoutParams paramsRadio = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+                //radioGroup.addView(tableLayout, paramsRadio);
+            }
+            catch (Exception e){
+                Log.d("Error", e.getMessage());
+            }*/
+
 
             try {
                 for (int i=0; i < draw.size(); i++) {
                     RadioButton radioButton = new RadioButton(cntx);
-                    radioButton.setCompoundDrawablesRelativeWithIntrinsicBounds(draw.get(i),null,null,null);
+                    radioButton.setBackgroundResource(R.drawable.rbbackground);
+                    radioButton.setCompoundDrawablesRelativeWithIntrinsicBounds(null,draw.get(i),null,null);
                     radioButton.setId((int) i+1);//set radiobutton id and store it somewhere
                     RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(15, 15, 15, 15);
+                    params.setMargins((radioGroup.getWidth()-draw.get(i).getMinimumWidth()-20)/2, 10, (radioGroup.getWidth()-draw.get(i).getMinimumWidth()-20)/2, 10);
+                    //params.setMargins((radioGroup.getWidth()-draw.get(i).getMinimumWidth()-20)/2, 10, (radioGroup.getWidth()-draw.get(i).getMinimumWidth()-20)/2, 10);
+
+
+                    radioButton.setWidth(draw.get(i).getMinimumWidth()+20);
+                    radioButton.setHeight(draw.get(i).getMinimumHeight() + 20);
+                    radioButton.setPadding(10,10,10,10);
+                    radioButton.setButtonDrawable(android.R.color.transparent);
                     radioGroup.addView(radioButton, params);
+                    Log.d("RadiogroupWidth", String.valueOf(radioGroup.getWeightSum()));
                 }
             }
             catch (Exception e){
@@ -265,15 +316,7 @@ public class QuizActivity extends AppCompatActivity {
 
             radioGroup.clearCheck();
 
-            ArrayList<RadioButton> radioButtonsList = new ArrayList<RadioButton>();
 
-            for (int i=0;i<radioGroup.getChildCount();i++) {
-                View rb = radioGroup.getChildAt(i);
-                if (rb instanceof RadioButton) {
-                    radioButtonsList.add((RadioButton)rb);
-                }
-            }
-            Log.d("TAG","you have "+radioButtonsList.size()+" radio buttons");
 
 
         }

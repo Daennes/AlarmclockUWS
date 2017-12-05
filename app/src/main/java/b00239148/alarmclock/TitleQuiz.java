@@ -1,16 +1,18 @@
 package b00239148.alarmclock;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.models.PlaylistTrack;
+import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * Created by dennisalt on 10/11/2017.
  */
 
 public class TitleQuiz extends SongQuiz {
-    private ArrayList<String[]> answers = new ArrayList<String[]>();       //Could be titles or links to song covers??
+    private ArrayList<String> answers = new ArrayList<String>();       //Could be titles or links to song covers??
 
     TitleQuiz(){
         super.songTitle = "Which is the right song title?";
@@ -21,15 +23,6 @@ public class TitleQuiz extends SongQuiz {
         readAnswers();
     }
 
-    public void fillDummyAnsw()
-    {
-        String[] tempString = new String[2];
-        for (int i=0; i<4;i++){
-            answers.add(new String[] {"Answer: " + i, "false"});
-        }
-        answers.set(1, new String[] {mySpotify.getCurrentSong().name, "true"});
-
-    }
 
     //TODO Implement methods
     @Override
@@ -37,7 +30,27 @@ public class TitleQuiz extends SongQuiz {
         List<PlaylistTrack> AllTracks = mySpotify.getAllTracks();
         String[] tempString = new String[2];
         String tempNewTrack = "";
-        answers.add(new String[] {mySpotify.getCurrentSong().name, "true"});
+        ArrayList<String> tempTracks = new ArrayList<String>();
+
+
+        for (int i = 0; i<AllTracks.size(); i++){
+            if(AllTracks.get(i).track.name != mySpotify.getCurrentSong().name){
+                tempTracks.add(AllTracks.get(i).track.name);
+            }
+        }
+
+        Collections.shuffle(tempTracks);
+
+        answers.add(mySpotify.getCurrentSong().name);
+
+        for (int i = 0; i< 3; i++){
+            answers.add(tempTracks.get(i));
+        }
+
+
+
+
+        /*answers.add(new String[] {mySpotify.getCurrentSong().name, "true"});
         for (int i=0; i<3;i++){
             tempNewTrack = AllTracks.get((int)Math.floor((Math.random()*AllTracks.size()))).track.name;
 
@@ -49,11 +62,11 @@ public class TitleQuiz extends SongQuiz {
                 }
             }
             answers.add(new String[] {tempNewTrack, "false"});
-        }
+        }*/
     }
 
     @Override
-    public ArrayList<String[]> getAnswers() {
+    public ArrayList<String> getAnswers() {
         return answers;
     }
 }
