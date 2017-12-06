@@ -1,14 +1,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item
-        android:drawable="@drawable/rbunchecked"
-        android:state_checked="true"
-        android:state_pressed="true" />
-    <item
-        android:drawable="@drawable/rbchecked"
-        android:state_pressed="true" />
-    <item
-        android:drawable="@drawable/rbchecked"
-        android:state_checked="true" />
-    <item
-        android:drawable="@drawable/rbunchecked" />
+    <item android:state_checked="true" android:state_pressed="true" android:drawable="@drawable/rbunchecked" />
+    <item android:state_pressed="true" android:drawable="@drawable/rbchecked" />
+    <item android:state_checked="true" android:drawable="@drawable/rbchecked" />
+    <item android:drawable="@drawable/rbunchecked" />
 </selector>

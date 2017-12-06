@@ -70,7 +70,10 @@ public class MainActivity extends AppCompatActivity {
         setPlaylist.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                playlistNameView.setText(playlistNameEdit.getText().toString());
+                if (playlistNameEdit.getText().toString() != "")
+                    playlistNameView.setText("Current playlist: " + playlistNameEdit.getText().toString());
+                else
+                    playlistNameView.setText("No playlist selected");
             }
         });
 
