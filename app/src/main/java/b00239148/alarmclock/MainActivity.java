@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeToQuiz(){
 
-        String playlistName = playlistNameView.getText().toString();
+        String playlistName = playlistNameView.getText().toString().substring(18);
         Intent intent = new Intent(this, QuizActivity.class);
 
         alarm_timepicker = (TimePicker) findViewById(R.id.timePicker);

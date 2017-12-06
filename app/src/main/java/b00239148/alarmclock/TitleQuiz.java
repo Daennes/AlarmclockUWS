@@ -47,22 +47,6 @@ public class TitleQuiz extends SongQuiz {
             answers.add(tempTracks.get(i));
         }
 
-
-
-
-        /*answers.add(new String[] {mySpotify.getCurrentSong().name, "true"});
-        for (int i=0; i<3;i++){
-            tempNewTrack = AllTracks.get((int)Math.floor((Math.random()*AllTracks.size()))).track.name;
-
-            for (int j=0; j<answers.size(); j++){
-                if (tempNewTrack == answers.get(j)[0]){             //check if the titke is already in the answers
-                    tempNewTrack = AllTracks.get((int)Math.floor((Math.random()*AllTracks.size()))).track.name;
-                    j=0;
-                    continue;
-                }
-            }
-            answers.add(new String[] {tempNewTrack, "false"});
-        }*/
     }
 
     @Override
