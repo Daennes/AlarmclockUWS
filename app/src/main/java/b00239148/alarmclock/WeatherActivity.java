@@ -73,7 +73,7 @@ public class WeatherActivity extends AppCompatActivity {
         WeatherInfo weatherInfo = new WeatherInfo();
 
         TextView tempViewC = (TextView) findViewById(R.id.TempViewC);
-        TextView tempViewF = (TextView) findViewById(R.id.TempViewF);
+        //TextView tempViewF = (TextView) findViewById(R.id.TempViewF);
         TextView condView = (TextView) findViewById(R.id.TextViewCo);
         ImageView i = (ImageView)findViewById(R.id.image);
         TextView windView = (TextView) findViewById(R.id.wind);
@@ -107,8 +107,8 @@ public class WeatherActivity extends AppCompatActivity {
             nameView.setText(name);
             regionView.setText(region);
             countryView.setText(country);
-            latView.setText("Lat: " + lat + " ");
-            lonView.setText("Lon: " + lon);
+            latView.setText("Lat " + lat + " )");
+            lonView.setText("(Lon " + lon);
 
             JSONObject current = jsonObject.getJSONObject("current");
             String temp_c = current.getString("temp_c");
@@ -119,13 +119,13 @@ public class WeatherActivity extends AppCompatActivity {
             String feelslike_c = current.getString("feelslike_c");
             String vis_km = current.getString("vis_km");
 
-            tempViewC.setText("Temp C: " + temp_c);
-            tempViewF.setText("Temp F: " + temp_f);
-            windView.setText("Wind mph :" + wind_mph);
-            prsView.setText("Wind Pressure :" + pressure_mb);
-            humidView.setText("Humidity :" + humidity);
-            feelsView.setText("Feels like C :" + feelslike_c);
-            visView.setText("Visibility Km :" + vis_km);
+            tempViewC.setText("Temp " + temp_c + " C (" + temp_f + " F)");
+            //tempViewF.setText("Temp " + temp_f + " F");
+            windView.setText("Wind mph  " + wind_mph);
+            prsView.setText("Wind Pressure  " + pressure_mb);
+            humidView.setText("Humidity  " + humidity);
+            feelsView.setText("Feels like " + feelslike_c + "C ");
+            visView.setText("Visibility " + vis_km + " Km");
 
             String icon = current.getJSONObject("condition").getString("icon");
             Picasso.with(getBaseContext())
@@ -135,7 +135,7 @@ public class WeatherActivity extends AppCompatActivity {
 
 
             String condition = current.getJSONObject("condition").getString("text");
-            condView.setText("Condition: " + condition);
+            condView.setText("(" + condition + ")");
 
             String code = current.getJSONObject("condition").getString("code");
             if(code.equals("1000"))
