@@ -10,8 +10,7 @@
     tools:layout_editor_absoluteY="81dp"
     tools:showIn="@layout/activity_weather">
 
-
-    <ImageView
+<ImageView
         android:id="@+id/image"
         android:layout_width="108dp"
         android:layout_height="106dp"
@@ -30,7 +29,7 @@
         android:layout_toEndOf="@+id/pressure"
         android:layout_toRightOf="@+id/pressure"
         android:text="TextView"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="35sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +46,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="55dp"
         android:text="TextView"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/image"
         app:layout_constraintStart_toEndOf="@+id/name"
@@ -63,6 +62,7 @@
         android:layout_toEndOf="@+id/pressure"
         android:layout_toRightOf="@+id/pressure"
         android:text="TextView"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/name"
         app:layout_constraintTop_toBottomOf="@+id/name" />
@@ -77,7 +77,7 @@
         android:layout_marginBottom="1dp"
         android:layout_marginStart="8dp"
         android:text="TextView"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/region"
         app:layout_constraintStart_toEndOf="@+id/region"
@@ -93,7 +93,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/longitude"
         app:layout_constraintTop_toBottomOf="@+id/TextViewCo" />
@@ -108,6 +108,7 @@
         android:layout_toLeftOf="@+id/image"
         android:layout_toStartOf="@+id/image"
         android:text="TextView"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/region"
         app:layout_constraintTop_toBottomOf="@+id/latitude" />
@@ -121,7 +122,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="147dp"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/wind"
@@ -139,6 +140,7 @@
         android:layout_marginTop="8dp"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="@+id/TempViewC"
         app:layout_constraintStart_toStartOf="@+id/TempViewC"
         app:layout_constraintTop_toBottomOf="@+id/TempViewC" />
@@ -152,7 +154,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="28dp"
         android:layout_marginStart="38dp"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/humidity"
         app:layout_constraintStart_toStartOf="parent" />
@@ -166,7 +168,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="28dp"
         android:layout_marginEnd="8dp"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/visibility"
         app:layout_constraintEnd_toEndOf="parent"
@@ -183,6 +185,8 @@
         android:layout_marginEnd="8dp"
         android:text="TextView"
         android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -196,7 +200,7 @@
         android:layout_marginBottom="70dp"
         android:layout_marginStart="38dp"
         android:text="TextView"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
