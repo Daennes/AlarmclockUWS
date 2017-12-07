@@ -54,10 +54,6 @@ public class QuizActivity extends AppCompatActivity {
 
 
         spotify.setOrChangePlaylist(test_intent.getStringExtra("playlistName"));
-        if(!spotify.playNextSong()) {
-            Toast.makeText(getApplicationContext(), "Playlist not found or empty!!!", Toast.LENGTH_SHORT).show();
-            onBackPressed();
-        }
 
         Button submitBtn = (Button) findViewById(R.id.submitBtn_id);
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +87,12 @@ public class QuizActivity extends AppCompatActivity {
         });
 
         try {
-            loadQuizData();
+            if(!spotify.playNextSong()) {
+                startActivity(new Intent(this,MainActivity.class));
+                Toast.makeText(getApplicationContext(), "Playlist not found or empty!!!", Toast.LENGTH_SHORT).show();
+            } else {
+                loadQuizData();
+            }
         }
         catch (Exception e){
             Log.d("Error","Error Loading Quiz");
