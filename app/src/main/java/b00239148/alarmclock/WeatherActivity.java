@@ -92,7 +92,7 @@ public class WeatherActivity extends AppCompatActivity {
             //tempViewC.setText("");
             //tempViewF.setText("");
 
-            String weatherApiDetails = weatherInfo.execute("http://api.apixu.com/v1/current.json?q=Glasgow&key=6c57ce30e8d54375ae1102019172610").get();
+            String weatherApiDetails = weatherInfo.execute("http://api.apixu.com/v1/current.json?q=Paisley&key=6c57ce30e8d54375ae1102019172610").get();
             Log.i("Weather Api Info", weatherApiDetails);
 
             JSONObject jsonObject = new JSONObject(weatherApiDetails);
